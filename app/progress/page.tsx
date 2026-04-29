@@ -103,7 +103,7 @@ async function fetchMoodHistory(): Promise<MoodEntry[]> {
 
 async function fetchActivities(): Promise<BackendActivity[]> {
   try {
-    const res = await fetch(`${API_BASE}/api/activity`, {
+    const res = await fetch(`/api/activity`, {
       headers: getAuthHeaders(),
     });
     if (!res.ok) return [];

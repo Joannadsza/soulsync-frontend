@@ -43,8 +43,6 @@ export interface ApiResponse {
   };
 }
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
-
 const getAuthHeaders = () => {
   const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
   return {
@@ -54,7 +52,7 @@ const getAuthHeaders = () => {
 };
 
 export const createChatSession = async (): Promise<string> => {
-  const response = await fetch(`${API_BASE}/chat/sessions`, {
+  const response = await fetch(`/api/chat/sessions`, {
     method: "POST",
     headers: getAuthHeaders(),
   });
@@ -70,7 +68,7 @@ export const sendChatMessage = async (
   sessionId: string,
   message: string
 ): Promise<ApiResponse> => {
-  const response = await fetch(`${API_BASE}/chat/sessions/${sessionId}/messages`, {
+  const response = await fetch(`/api/chat/sessions/${sessionId}/messages`, {
     method: "POST",
     headers: getAuthHeaders(),
     body: JSON.stringify({ message }),
@@ -83,7 +81,7 @@ export const sendChatMessage = async (
 };
 
 export const getChatHistory = async (sessionId: string): Promise<ChatMessage[]> => {
-  const response = await fetch(`${API_BASE}/chat/sessions/${sessionId}/history`, {
+  const response = await fetch(`/api/chat/sessions/${sessionId}/history`, {
     headers: getAuthHeaders(),
   });
   if (!response.ok) {
@@ -101,7 +99,7 @@ export const getChatHistory = async (sessionId: string): Promise<ChatMessage[]> 
 };
 
 export const getAllChatSessions = async (): Promise<ChatSession[]> => {
-  const response = await fetch(`${API_BASE}/chat/sessions`, {
+  const response = await fetch(`/api/chat/sessions`, {
     headers: getAuthHeaders(),
   });
   if (!response.ok) {
@@ -124,10 +122,8 @@ export const getAllChatSessions = async (): Promise<ChatSession[]> => {
   });
 };
 
-// ─── NEW: End-of-session mood analysis ───────────────────────────────────────
-// Call this once when the user ends a session. Returns full mood analysis.
 export const analyseSession = async (sessionId: string): Promise<ApiResponse["analysis"]> => {
-  const response = await fetch(`${API_BASE}/chat/sessions/${sessionId}/analyse`, {
+  const response = await fetch(`/api/chat/sessions/${sessionId}/analyse`, {
     method: "POST",
     headers: getAuthHeaders(),
   });
